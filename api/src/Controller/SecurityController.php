@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class SecurityController extends AbstractController
@@ -59,9 +60,9 @@ class SecurityController extends AbstractController
                 'main'          // the name of your firewall in security.yaml
             );
     
-            return new JsonResponse([ 'message' => 'Ca marche!!!' ]);
+            return $this->redirectToRoute('user_get-current');
         } else {
-            return new JsonResponse([ 'message' => 'Mauvais mot de passe' ]);
+            throw new UnauthorizedHttpException('', 'Invalid password for user ' . $email . '.');
         }
     }
 
@@ -69,14 +70,4 @@ class SecurityController extends AbstractController
      * @Route("/logout", name="logout")
      */
     public function logout() { }
-
-    /**
-     * @IsGranted("ROLE_USER")
-     * @Route("/current-user", name="current-user")
-     */
-    public function getCurrentUser() {
-        $user = $this->getUser();
-
-        return new JsonResponse($user);
-    }
 }
