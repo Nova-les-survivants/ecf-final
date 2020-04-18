@@ -1,38 +1,37 @@
 import React, { Component } from 'react';
-import makeRequest, { HTTP_METHOD } from './services/makeRequest';
-import store from './redux/store';
-import { fetchCurrentUserRequest, fetchCurrentUserSuccess, fetchCurrentUserFailure } from './redux/actions';
+import makeRequest from './services/makeRequest';
 import Test from './components/Test';
+import { withCurrentUser } from './redux/connectors';
+import LoginForm from './components/LoginForm';
+import LogoutButton from './components/LogoutButton';
 
-export default class App extends Component
+class App extends Component
 {
   componentDidMount = () => {
     this.fetchCurrentUser();
   }
 
   fetchCurrentUser = () => {
-    store.dispatch(fetchCurrentUserRequest());
+    const { fetchCurrentUserFailure, fetchCurrentUserRequest, fetchCurrentUserSuccess } = this.props;
 
-    makeRequest('user/current')
+    fetchCurrentUserRequest();
+
+    makeRequest('/user/current')
     .then(
-      response => store.dispatch(fetchCurrentUserSuccess(response.data))
+      response => fetchCurrentUserSuccess(response.data)
     )
     .catch(
-      error => store.dispatch(fetchCurrentUserFailure(error))
+      error => fetchCurrentUserFailure(error)
     )
   }
 
-  login = () => {
-    store.dispatch(fetchCurrentUserRequest());
-
-    makeRequest('login', HTTP_METHOD.POST, { username: 'admin@test.com', password: 'admin' })
-    .then(
-      response => store.dispatch(fetchCurrentUserSuccess(response.data))
-    )
-    .catch(
-      error => store.dispatch(fetchCurrentUserFailure(error))
-    )
-  }
-
-  render = () => <Test />;
+  render = () => (
+    <div>
+      <LoginForm />
+      <LogoutButton />
+      <Test test="This is a test prop" />
+    </div>
+  );
 }
+
+export default withCurrentUser(App);

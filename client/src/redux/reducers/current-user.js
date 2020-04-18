@@ -1,5 +1,5 @@
 import { NEED_FETCHING, FETCHING, FETCH_SUCCESSFUL, FETCH_FAILED } from "../status";
-import { FETCH_CURRENT_USER_REQUEST, FETCH_CURRENT_USER_SUCCESS, FETCH_CURRENT_USER_FAILURE } from "../actionsTypes";
+import { FETCH_CURRENT_USER_REQUEST, FETCH_CURRENT_USER_SUCCESS, FETCH_CURRENT_USER_FAILURE, RESET_CURRENT_USER } from "../actionsTypes";
 
 const initialState = {
   data: null,
@@ -9,6 +9,9 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case RESET_CURRENT_USER:
+      return initialState;
+
     case FETCH_CURRENT_USER_REQUEST:
       return {
         ...state,

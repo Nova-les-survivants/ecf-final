@@ -43,13 +43,13 @@ class SecurityController extends AbstractController
     {
         $data = \json_decode($request->getContent());
 
-        $email = $data->email;
+        $username = $data->username;
         $password = $data->password;
 
-        $user = $this->userRepository->findOneBy([ 'email' => $email ]);
+        $user = $this->userRepository->findOneBy([ 'email' => $username ]);
 
         if (is_null($user)) {
-            throw new BadRequestHttpException('User "' . $email . '" does not exist.');
+            throw new BadRequestHttpException('User "' . $username . '" does not exist.');
         }
 
         if ($this->passwordEncoder->isPasswordValid($user, $password)) {
@@ -62,7 +62,7 @@ class SecurityController extends AbstractController
     
             return $this->redirectToRoute('user_get-current');
         } else {
-            throw new UnauthorizedHttpException('', 'Invalid password for user ' . $email . '.');
+            throw new UnauthorizedHttpException('', 'Invalid password for user ' . $username . '.');
         }
     }
 
@@ -70,4 +70,12 @@ class SecurityController extends AbstractController
      * @Route("/logout", name="logout")
      */
     public function logout() { }
+
+    /**
+     * @Route("/", name="info")
+     */
+    public function info ()
+    {
+        return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
+    }
 }
