@@ -24,6 +24,12 @@ class App extends Component
       error => {
         console.log(error);
 
+        if (typeof error.response === 'undefined') {
+          resetCurrentUser();
+          window.alert('L\'API n\'est pas disponible! Lancez le serveur et rechargez la page!');
+          return;
+        }
+
         const status = error.response.status;
 
         switch (status) {
