@@ -12,7 +12,7 @@ class App extends Component
   }
 
   fetchCurrentUser = () => {
-    const { fetchCurrentUserFailure, fetchCurrentUserRequest, fetchCurrentUserSuccess } = this.props;
+    const { fetchCurrentUserFailure, fetchCurrentUserRequest, fetchCurrentUserSuccess, resetCurrentUser } = this.props;
 
     fetchCurrentUserRequest();
 
@@ -21,7 +21,20 @@ class App extends Component
       response => fetchCurrentUserSuccess(response.data)
     )
     .catch(
-      error => fetchCurrentUserFailure(error)
+      error => {
+        console.log(error);
+
+        const status = error.response.status;
+
+        switch (status) {
+          case 401:
+            resetCurrentUser();
+            break;
+
+          default:
+            fetchCurrentUserFailure(error);
+        }
+      }
     )
   }
 

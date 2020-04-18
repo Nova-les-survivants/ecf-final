@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -49,7 +50,7 @@ class SecurityController extends AbstractController
         $user = $this->userRepository->findOneBy([ 'email' => $username ]);
 
         if (is_null($user)) {
-            throw new BadRequestHttpException('User "' . $username . '" does not exist.');
+            throw new NotFoundHttpException('User "' . $username . '" does not exist.');
         }
 
         if ($this->passwordEncoder->isPasswordValid($user, $password)) {
