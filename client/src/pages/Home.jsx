@@ -1,13 +1,13 @@
 import React, { Fragment, Component } from 'react';
 import { withCurrentUser } from '../redux/connectors';
-import { Navbar, Container, Nav, Jumbotron, Button, Alert } from 'react-bootstrap';
+import { Navbar, Container, Nav, Jumbotron, Button, Alert, Carousel } from 'react-bootstrap';
 import { FETCH_SUCCESSFUL, FETCHING } from '../redux/status';
 import { Spinner } from '../styles';
 import LogoutButton from '../components/LogoutButton';
 import { Link } from 'react-router-dom';
 import makeRequest from '../services/makeRequest';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCookieBite, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCookieBite, faSignInAlt, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 
 class HomePage extends Component
 {
@@ -102,14 +102,30 @@ class HomePage extends Component
                   </Fragment>
               }
             </Jumbotron>
-            <section>
-              <h2>
-                Dernières recettes publiées
-              </h2>
-              <div>
-                TO-DO
-              </div>
-            </section>
+            <h2>Nos dernières recettes</h2>
+            {recentRecipes ?
+              <Carousel>
+                {recentRecipes.map( (recipe, index) =>
+                  <Carousel.Item key={index}>
+                    <img
+                      className="d-block w-100"
+                      src={recipe.pictureUrl}
+                      alt={`Illustration de la recette ${recipe.name}`}
+                    />
+                    <Carousel.Caption>
+                      <h3>{recipe.name}</h3>
+                      <Link to={`/recipe/${recipe.id}`}>
+                        <Button>
+                          Voir la recette <FontAwesomeIcon icon={faAngleDoubleRight} />
+                        </Button>
+                      </Link>
+                    </Carousel.Caption>
+                  </Carousel.Item>
+                )}
+              </Carousel>
+              :
+              <Spinner />
+            }
           </main>
         </Container>
         <footer className="mt-4 text-center">
