@@ -35,7 +35,7 @@ class Recipe
     private $url;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(name="_portion", type="integer")
      */
     private $portion;
 
