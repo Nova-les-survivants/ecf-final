@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { withCurrentUser } from '../redux/connectors';
 import { Button, Form, FormGroup, FormControl, Alert } from 'react-bootstrap';
 import makeRequest, { HTTP_METHOD } from '../services/makeRequest';
-import { FETCH_FAILED } from '../redux/status';
+import { FETCH_FAILED, FETCH_SUCCESSFUL } from '../redux/status';
+import { Redirect } from 'react-router';
 
 class LoginForm extends Component
 {
@@ -38,7 +39,10 @@ class LoginForm extends Component
 
   render = () => {
     const { currentUser } = this.props;
-    const { username, password } = this.state;
+
+    if (currentUser.status === FETCH_SUCCESSFUL) {
+      return <Redirect to="/" />;
+    }
 
     let message;
     if (currentUser.status === FETCH_FAILED) {
@@ -67,6 +71,8 @@ class LoginForm extends Component
       }
     }
 
+    const { username, password } = this.state;
+
     return (
       <Form onSubmit={this.submitLogin}>
         { message && <Alert variant={message.type}>{message.content}</Alert>}
@@ -78,7 +84,7 @@ class LoginForm extends Component
           <Form.Label>Mot de passe</Form.Label>
           <FormControl type="password" placeholder="Mot de passe" value={password} onChange={this.handleChange('password')} />
         </FormGroup>
-        <Button type="submit">Connexion</Button>
+        <Button type="submit">Valider</Button>
       </Form>
     )
   }

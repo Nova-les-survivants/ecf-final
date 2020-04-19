@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import makeRequest from './services/makeRequest';
-import Test from './components/Test';
 import { withCurrentUser } from './redux/connectors';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import Test from './components/Test';
 import LoginForm from './components/LoginForm';
 import LogoutButton from './components/LogoutButton';
+import { HomePage, LoginPage, CreatePage, EditRecipePage, RecipePage, RecipeListPage } from './pages';
 
 class App extends Component
 {
@@ -45,11 +47,17 @@ class App extends Component
   }
 
   render = () => (
-    <div>
-      <LoginForm />
-      <LogoutButton />
-      <Test test="This is a test prop" />
-    </div>
+    <BrowserRouter>
+      <Switch>
+        <Route exact path="/" component={HomePage} />
+        <Route exact path="/login" component={LoginPage} />
+        <Route exact path="/recipe" component={RecipeListPage} />
+        <Route exact path="/recipe/:id(\d+)" component={RecipePage} />
+        <Route exact path="/create" component={CreatePage} />
+        <Route exact path="/create/recipe" component={EditRecipePage} />
+        <Route exact path="/create/recipe/:id(\d+)" component={EditRecipePage} />
+      </Switch>
+    </BrowserRouter>
   );
 }
 

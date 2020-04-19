@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { withCurrentUser } from '../redux/connectors';
 import makeRequest from '../services/makeRequest';
 import { Button } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 class LogoutButton extends Component
 {
@@ -16,7 +18,12 @@ class LogoutButton extends Component
     )
   }
 
-  render = () => <Button variant="secondary" onClick={this.logout}>Déconnexion</Button>;
+  render = () => (
+    <Button {...this.props} variant="secondary" onClick={this.logout}>
+      <FontAwesomeIcon icon={faSignOutAlt} />
+      {' '}Déconnexion
+    </Button>
+  );
 }
 
 export default withCurrentUser(LogoutButton);
