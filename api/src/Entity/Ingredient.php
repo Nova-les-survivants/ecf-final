@@ -15,6 +15,7 @@ class Ingredient implements \JsonSerializable
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'recipeIngredients' => $this->recipeIngredients->getValues()
         ];
     }
 

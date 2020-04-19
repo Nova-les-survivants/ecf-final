@@ -15,6 +15,8 @@ class RecipeIngredient implements \JsonSerializable
             'id' => $this->id,
             'unity' => $this->unity,
             'quantity' => $this->quantity,
+            'recipeId' => $this->recipe->getId(),
+            'ingredientId' => $this->ingredient->getId()
 
         ];
     }

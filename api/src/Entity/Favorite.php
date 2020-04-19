@@ -13,6 +13,9 @@ class Favorite implements \JsonSerializable
     {
         return [
             'id' => $this->id,
+            'recipeId' => $this->recipe->getId(),
+            'userId' => $this->user->getId(),
+            'recipeId' => $this->recipe->getId()
         ];
     }
 

@@ -25,6 +25,8 @@ class Recipe implements \JsonSerializable
             'bakeTime' => $this->bakeTime,
             'restTime' => $this->restTime,
             'createdAt' => $this->createdAt,
+            'recipeIngredients' => $this->recipeIngredients->getValues(),
+            'tags' => $this->tags->getValues(),
         ];
     }
 
