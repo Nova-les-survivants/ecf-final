@@ -21,6 +21,22 @@ class RecipeController extends AbstractController
     }
 
     /**
+     * @Route("/", name="get-all", methods={"GET"})
+     */
+    public function getAll()
+    {
+        return new JsonResponse($this->recipeRepository->findAll());
+    }
+
+    /**
+     * @Route("/{id<\d+>}", name="get-by-id", methods={"GET"})
+     */
+    public function getById(Recipe $recipe)
+    {
+        return new JsonResponse($recipe);
+    }
+
+    /**
      * @Route("/recent", name="recent", methods={"GET"})
      */
     public function getRecentRecipes()
