@@ -58,7 +58,7 @@ class RecipeController extends AbstractController
 
     /**
      * @IsGranted("ROLE_USER")
-     * @Route("/create", name="create", methods={"POST"})
+     * @Route("/", name="create", methods={"POST"})
      */
     public function create(Request $request, IngredientRepository $ingredientRepository)
     {
@@ -91,6 +91,55 @@ class RecipeController extends AbstractController
         $this->manager->persist($recipe);
         $this->manager->flush();
         
+        return new JsonResponse(null);
+    }
+
+    /**
+     * @IsGranted("ROLE_USER")
+     * @Route("/{id<\d+>}", name="update", methods={"PUT"})
+     */
+    public function update(Recipe $recipe, Request $request, IngredientRepository $ingredientRepository)
+    {
+        $receivedRecipe = json_decode($request->getContent(), true);
+
+        $recipe
+            ->setUser($this->getUser())
+            ->setName($receivedRecipe['name'])
+            ->setInstructions($receivedRecipe['instructions'])
+            ->setPictureUrl($receivedRecipe['pictureUrl'])
+        ;
+
+        foreach ($receivedRecipe['ingredients'] as $ingredientData)
+        {
+            $ingredient = $ingredientRepository->find($ingredientData['id']);
+
+            $recipeIngredient = new RecipeIngredient();
+            $recipeIngredient
+                ->setRecipe($recipe)
+                ->setMeasure($ingredientData['measure'])
+                ->setIngredient($ingredient)
+            ;
+
+            $this->manager->persist($recipeIngredient);
+
+            $recipe->addRecipeIngredient($recipeIngredient);
+        }
+
+        $this->manager->persist($recipe);
+        $this->manager->flush();
+        
+        return new JsonResponse(null);
+    }
+
+    /**
+     * @IsGranted("ROLE_USER")
+     * @Route("/{id<\d+>}", name="delete", methods={"DELETE"})
+     */
+    public function delete(Recipe $recipe)
+    {
+        $this->manager->remove($recipe);
+        $this->manager->flush();
+
         return new JsonResponse(null);
     }
 }

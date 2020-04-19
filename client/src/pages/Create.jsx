@@ -4,7 +4,7 @@ import makeRequest, { HTTP_METHOD } from '../services/makeRequest';
 import { Table, Button, Navbar, Nav, Alert, Container } from 'react-bootstrap';
 import { Spinner } from '../styles';
 import { Link, Redirect } from 'react-router-dom';
-import { faSignInAlt, faCookieBite } from '@fortawesome/free-solid-svg-icons';
+import { faSignInAlt, faCookieBite, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import LogoutButton from '../components/LogoutButton';
 import { FETCHING, FETCH_SUCCESSFUL, NEED_FETCHING } from '../redux/status';
@@ -95,8 +95,11 @@ class CreatePage extends Component
           }
           <main>
             <h1 className="mt-4 mb-4">Mes recettes</h1>
+            <Link to={`/create/recipe`}>
+              <Button variant="success">Nouvelle recette <FontAwesomeIcon icon={faPlus} /></Button>
+            </Link>
             {myRecipes ?
-              <Table striped bordered hover>
+              <Table striped bordered hover className="mt-4">
                 <thead>
                   <tr>
                     <th>Nom</th>
@@ -108,7 +111,11 @@ class CreatePage extends Component
                 <tbody>
                   {myRecipes.map( (recipe, index) =>
                     <tr key={index}>
-                      <td>{recipe.name}</td>
+                      <td>
+                        <Link to={`/recipe/${recipe.id}`}>
+                          {recipe.name}
+                        </Link>
+                      </td>
                       <td>{recipe.favorites.length}</td>
                       <td>
                         <Link to={`/create/recipe/${recipe.id}`}>
