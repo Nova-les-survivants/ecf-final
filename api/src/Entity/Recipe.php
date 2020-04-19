@@ -27,42 +27,7 @@ class Recipe
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $uri;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $url;
-
-    /**
-     * @ORM\Column(name="_portion", type="integer")
-     */
-    private $portion;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $pictureUrl;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $totalTime;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $preparationTime;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $bakeTime;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $restTime;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Tag", inversedBy="recipes")

@@ -16,14 +16,10 @@ abstract class CustomFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        if (!defined('static::AMOUNT')) {
-            throw new \RunTimeException('Constant AMOUNT not set in ' . get_called_class());
-        }
-
         $this->beforeCreate();
 
         for ($i = 0; $i < static::AMOUNT; $i += 1) {
-            $object = $this->createObject();
+            $object = $this->createObject($i);
             $manager->persist($object);
         }
 
@@ -34,4 +30,5 @@ abstract class CustomFixtures extends Fixture
 
     abstract protected function createObject();
 
+    abstract protected function amount(): int;
 }

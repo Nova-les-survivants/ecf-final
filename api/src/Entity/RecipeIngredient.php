@@ -19,12 +19,7 @@ class RecipeIngredient
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    private $unity;
-
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $quantity;
+    private $measure;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Recipe", inversedBy="recipeIngredients")
@@ -43,14 +38,14 @@ class RecipeIngredient
         return $this->id;
     }
 
-    public function getUnity(): ?string
+    public function getMeasure(): ?string
     {
-        return $this->unity;
+        return $this->measure;
     }
 
-    public function setUnity(string $unity): self
+    public function setMeasure(string $measure): self
     {
-        $this->unity = $unity;
+        $this->measure = $measure;
 
         return $this;
     }
