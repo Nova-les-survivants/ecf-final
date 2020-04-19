@@ -75,6 +75,7 @@ class HomePage extends Component
             : null
           }
           <main>
+            
             <Jumbotron className="text-center">
               { currentUser.status === FETCHING ?
                 <Spinner />

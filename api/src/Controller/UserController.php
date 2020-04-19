@@ -36,8 +36,8 @@ class UserController extends AbstractController
      */
     public function getRecipes(User $user)
     {
-        $recipes = $this->userRepository->findRecipes($user->getId());
+        $recipes = $user->getRecipes();
 
-        return new JsonResponse($recipes);
+        return new JsonResponse($recipes->getValues());
     }
 }

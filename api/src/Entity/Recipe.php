@@ -16,14 +16,16 @@ class Recipe implements \JsonSerializable
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'instructions' => $this->instructions,
             'pictureUrl' => $this->pictureUrl,
             'createdAt' => $this->createdAt,
             'recipeIngredients' => $this->recipeIngredients->getValues(),
             'tags' => $this->tags->getValues(),
+            'favorites' => $this->favorites->getValues(),
             'user' => [
                 'id' => $this->user->getId(),
                 'username' => $this->user->getUsername(),
-            ]
+            ],
         ];
     }
 
