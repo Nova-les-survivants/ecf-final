@@ -9,8 +9,15 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TagRepository")
  */
-class Tag
+class Tag implements \JsonSerializable
 {
+    public function jsonSerialize(): array {
+        return [
+            'id' => $this->id,
+            'name' => $this->name
+        ];
+    }
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
