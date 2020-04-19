@@ -17,6 +17,7 @@ class User implements UserInterface, \JsonSerializable
             'id' => $this->id,
             'email' => $this->email,
             'roles' => $this->roles,
+            'recipes' => $this->recipes->getValues(),
         ];
     }
 

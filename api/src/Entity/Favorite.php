@@ -7,8 +7,18 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\FavoriteRepository")
  */
-class Favorite
+class Favorite implements \JsonSerializable
 {
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'recipeId' => $this->recipe->getId(),
+            'userId' => $this->user->getId(),
+            'recipeId' => $this->recipe->getId()
+        ];
+    }
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

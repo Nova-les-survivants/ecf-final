@@ -10,8 +10,26 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RecipeRepository")
  */
-class Recipe
+class Recipe implements \JsonSerializable
 {
+    public function jsonSerialize(): array {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'uri' => $this->uri,
+            'url' => $this->url,
+            'portion' => $this->portion,
+            'pictureUrl' => $this->pictureUrl,
+            'totalTime' => $this->totalTime,
+            'preparationTime' => $this->preparationTime,
+            'bakeTime' => $this->bakeTime,
+            'restTime' => $this->restTime,
+            'createdAt' => $this->createdAt,
+            'recipeIngredients' => $this->recipeIngredients->getValues(),
+            'tags' => $this->tags->getValues(),
+        ];
+    }
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -51,7 +69,7 @@ class Recipe
     private $favorites;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime")
      */
     private $createdAt;
 
