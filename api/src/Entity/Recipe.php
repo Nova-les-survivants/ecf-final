@@ -20,6 +20,10 @@ class Recipe implements \JsonSerializable
             'createdAt' => $this->createdAt,
             'recipeIngredients' => $this->recipeIngredients->getValues(),
             'tags' => $this->tags->getValues(),
+            'user' => [
+                'id' => $this->user->getId(),
+                'username' => $this->user->getUsername(),
+            ]
         ];
     }
 
