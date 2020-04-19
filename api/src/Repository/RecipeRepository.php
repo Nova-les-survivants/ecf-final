@@ -19,12 +19,20 @@ class RecipeRepository extends ServiceEntityRepository
         parent::__construct($registry, Recipe::class);
     }
 
+    /**
+     * @return Recipe[] Returns an array of Recipe objects
+     */
     public function findLatest($amount)
     {
-        return $this->createQueryBuilder('r')
+        $query = $this->createQueryBuilder('r')
             ->orderBy('r.createdAt', 'DESC')
-            ->setMaxResults($amount)
-            ->getQuery()
+        ;
+
+        if (!is_null($amount)) {
+            $query->setMaxResults($amount);
+        }
+
+        return $query->getQuery()
             ->getResult()
         ;
     }
