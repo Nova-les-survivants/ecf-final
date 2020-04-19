@@ -3,10 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Recipe;
+use App\Entity\RecipeIngredient;
 use App\Repository\RecipeRepository;
+use App\Repository\IngredientRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
@@ -15,10 +19,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class RecipeController extends AbstractController
 {
     private $recipeRepository;
+    private $manager;
 
-    public function __construct(RecipeRepository $recipeRepository)
+    public function __construct(
+        RecipeRepository $recipeRepository,
+        EntityManagerInterface $manager
+    )
     {
         $this->recipeRepository = $recipeRepository;
+        $this->manager = $manager;
     }
 
     /**
@@ -48,44 +57,40 @@ class RecipeController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_USER")
      * @Route("/create", name="create", methods={"POST"})
      */
-    public function create(Request $request)
+    public function create(Request $request, IngredientRepository $ingredientRepository)
     {
-        $receivedRecipe = json_decode($request->getContent());
+        $receivedRecipe = json_decode($request->getContent(), true);
 
-        if (!empty($receivedRecipe)) {
-            $recipe = new Recipe();
-            $recipe
-                ->setUser($this->getUser())
-                ->setName($receivedRecipe['name'])
-                ->setUri($receivedRecipe['uri'])
-                ->setUrl($receivedRecipe['url'])
-                ->setPortion($receivedRecipe['portion'])
-                ->setPictureUrl($receivedRecipe['pictureUrl'])
-                ->settotalTime($receivedRecipe['uri'])
-                ->setPreparationTime($receivedRecipe['preparationTime'])
-                ->setBakeTime($receivedRecipe['bakeTime'])
-                ->setRestTime($receivedRecipe['restTime'])
+        $recipe = new Recipe();
+        $recipe
+            ->setUser($this->getUser())
+            ->setName($receivedRecipe['name'])
+            ->setInstructions($receivedRecipe['instructions'])
+            ->setPictureUrl($receivedRecipe['pictureUrl'])
+        ;
+            
+        foreach ($receivedRecipe['ingredients'] as $ingredientData)
+        {
+            $ingredient = $ingredientRepository->find($ingredientData['id']);
+
+            $recipeIngredient = new RecipeIngredient();
+            $recipeIngredient
+                ->setRecipe($recipe)
+                ->setMeasure($ingredientData['measure'])
+                ->setIngredient($ingredient)
             ;
-                
-                foreach ($receivedRecipe['tags'] as $tag)
-                {
-                    $recipe->addTag($tag);
-                } 
-                
-                foreach ($receivedRecipe['recipeIngredients'] as $ingredient)
-                {
-                    $recipe->addRecipeIngredient($ingredient);
-                }
-    
-            
-            $this->manager->persist($recipe);
-            $this->manager-flush();
-            
-            return new JsonResponse(JsonResponse::HTTP_CREATED);
-        } else {
-            return new JsonResponse(JsonResponse::HTTP_NO_CONTENT);
+
+            $this->manager->persist($recipeIngredient);
+
+            $recipe->addRecipeIngredient($recipeIngredient);
         }
+
+        $this->manager->persist($recipe);
+        $this->manager->flush();
+        
+        return new JsonResponse(null);
     }
 }
