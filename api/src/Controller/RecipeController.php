@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Recipe;
 use App\Repository\RecipeRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,12 +32,44 @@ class RecipeController extends AbstractController
     }
 
     /**
-     * @Route("/{id<\d+>", name="create", methods={"POST"})
+     * @Route("/create", name="create", methods={"POST"})
      */
-    public function create()
+    public function create(Request $request)
     {
-        $recipe = new Recipe();
+        $receivedRecipe = json_decode($request->getContent());
 
-        
+        if (!empty($receivedRecipe)) {
+            $recipe = new Recipe();
+            $recipe
+                ->setUser($this->getUser())
+                ->setName($receivedRecipe['name'])
+                ->setUri($receivedRecipe['uri'])
+                ->setUrl($receivedRecipe['url'])
+                ->setPortion($receivedRecipe['portion'])
+                ->setPictureUrl($receivedRecipe['pictureUrl'])
+                ->settotalTime($receivedRecipe['uri'])
+                ->setPreparationTime($receivedRecipe['preparationTime'])
+                ->setBakeTime($receivedRecipe['bakeTime'])
+                ->setRestTime($receivedRecipe['restTime'])
+            ;
+                
+                foreach ($receivedRecipe['tags'] as $tag)
+                {
+                    $recipe->addTag($tag);
+                } 
+                
+                foreach ($receivedRecipe['recipeIngredients'] as $ingredient)
+                {
+                    $recipe->addRecipeIngredient($ingredient);
+                }
+    
+            
+            $this->manager->persist($recipe);
+            $this->manager-flush();
+            
+            return new JsonResponse(JsonResponse::HTTP_CREATED);
+        } else {
+            return new JsonResponse(JsonResponse::HTTP_NO_CONTENT);
+        }
     }
 }
