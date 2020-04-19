@@ -32,7 +32,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id<\d+>}/recipes", name="get-recipes", methods="{GET}")
+     * @Route("/{id<\d+>}/recipes", name="get-recipes", methods={"GET"})
      */
     public function getRecipes(User $user)
     {

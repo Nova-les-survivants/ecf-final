@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Tag;
 use App\Entity\Recipe;
+use App\Entity\Favorite;
 use App\Entity\Ingredient;
 use App\Entity\RecipeIngredient;
 use App\Repository\UserRepository;
@@ -44,6 +45,7 @@ class RecipesFixtures extends Fixture implements DependentFixtureInterface
             $recipe = new Recipe();
             $recipe
                 ->setName($recipeData['strMeal'])
+                ->setInstructions($recipeData['strInstructions'])
                 ->setCreatedAt($this->faker->dateTime())
                 ->setPictureUrl($recipeData['strMealThumb'])
                 ->setUser($users[rand(0, sizeof($users) - 1)])
@@ -100,6 +102,19 @@ class RecipesFixtures extends Fixture implements DependentFixtureInterface
                 ;
     
                 $manager->persist($recipeIngredient);
+            }
+
+            foreach ($users as $user) {
+                if (rand(0, 4) === 0) {
+                    $favorite = new Favorite();
+
+                    $favorite
+                        ->setRecipe($recipe)
+                        ->setUser($user)
+                    ;
+
+                    $manager->persist($favorite);
+                }
             }
 
             $manager->persist($recipe);

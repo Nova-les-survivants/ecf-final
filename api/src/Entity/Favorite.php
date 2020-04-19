@@ -15,7 +15,6 @@ class Favorite implements \JsonSerializable
             'id' => $this->id,
             'recipeId' => $this->recipe->getId(),
             'userId' => $this->user->getId(),
-            'recipeId' => $this->recipe->getId()
         ];
     }
 

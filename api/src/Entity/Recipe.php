@@ -16,14 +16,7 @@ class Recipe implements \JsonSerializable
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'uri' => $this->uri,
-            'url' => $this->url,
-            'portion' => $this->portion,
             'pictureUrl' => $this->pictureUrl,
-            'totalTime' => $this->totalTime,
-            'preparationTime' => $this->preparationTime,
-            'bakeTime' => $this->bakeTime,
-            'restTime' => $this->restTime,
             'createdAt' => $this->createdAt,
             'recipeIngredients' => $this->recipeIngredients->getValues(),
             'tags' => $this->tags->getValues(),
@@ -72,6 +65,11 @@ class Recipe implements \JsonSerializable
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $instructions;
 
     public function __construct()
     {
@@ -302,6 +300,18 @@ class Recipe implements \JsonSerializable
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getInstructions(): ?string
+    {
+        return $this->instructions;
+    }
+
+    public function setInstructions(string $instructions): self
+    {
+        $this->instructions = $instructions;
 
         return $this;
     }
