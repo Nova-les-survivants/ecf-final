@@ -20,7 +20,7 @@ class RecipeController extends AbstractController
     }
 
     /**
-     * @Route("recent", name="recent")
+     * @Route("recent", name="recent", methods="{GET}")
      */
     public function getRecentRecipes()
     {
