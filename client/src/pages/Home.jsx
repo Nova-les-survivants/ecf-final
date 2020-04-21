@@ -1,13 +1,13 @@
 import React, { Fragment, Component } from 'react';
 import { withCurrentUser } from '../redux/connectors';
-import { Navbar, Container, Nav, Jumbotron, Button, Alert, Carousel } from 'react-bootstrap';
+import { Jumbotron, Button, Carousel } from 'react-bootstrap';
 import { FETCH_SUCCESSFUL, FETCHING } from '../redux/status';
 import { Spinner } from '../styles';
-import LogoutButton from '../components/LogoutButton';
 import { Link } from 'react-router-dom';
 import makeRequest from '../services/makeRequest';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCookieBite, faSignInAlt, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
+import { Layout } from '../components';
 
 class HomePage extends Component
 {
@@ -31,108 +31,59 @@ class HomePage extends Component
     const { recentRecipes, errorMessage } = this.state;
 
     return (
-      <div>
-        <header>
-          <Navbar bg="light" expand="lg">
-            <Link to="/">
-              <Navbar.Brand href="#home">
-                <FontAwesomeIcon icon={faCookieBite} />
-                {' '}weCook.ie
-              </Navbar.Brand>
-            </Link>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-              <Nav className="mr-auto">
-                <Link to="/" className="nav-link">Accueil</Link>
-                <Link to="/recipe" className="nav-link">Toutes les recettes</Link>
-              </Nav>
-                { currentUser.status === FETCHING ?
-                  <Nav>
-                    <Spinner />
-                  </Nav>
-                  :
-                    currentUser.status === FETCH_SUCCESSFUL ?
-                      <Nav>
-                        <Link to="/create" className="nav-link">Mes recettes</Link>
-                        <Navbar.Text>
-                          <LogoutButton size="sm" />
-                        </Navbar.Text>
-                      </Nav>
-                    :
-                      <Link to="/login">
-                        <Button size="sm">
-                          <FontAwesomeIcon icon={faSignInAlt} />
-                          {' '}Connexion
-                        </Button>
-                      </Link>
-                }
-            </Navbar.Collapse>
-          </Navbar>        
-        </header>
-        <Container>
-          {errorMessage ?
-            <Alert variant="danger">{errorMessage}</Alert>
-            : null
-          }
-          <main>
-            
-            <Jumbotron className="text-center">
-              { currentUser.status === FETCHING ?
-                <Spinner />
-                :
-                  currentUser.status === FETCH_SUCCESSFUL ?
-                  <Fragment>
-                    <h1>
-                      Bonjour {currentUser.data.email}!
-                    </h1>
-                    <p>
-                      Texte amical pour les utilisateurs inscrits
-                    </p>
-                  </Fragment>
-                  :
-                  <Fragment>
-                    <h1>
-                      Bienvenue!
-                    </h1>
-                    <p>
-                      Texte amical pour inviter les visiteurs à s'inscrire
-                    </p>
-                    <Link to='/login'>
-                      <Button>Se connecter</Button>
-                    </Link>
-                  </Fragment>
-              }
-            </Jumbotron>
-            <h2>Nos dernières recettes</h2>
-            {recentRecipes ?
-              <Carousel>
-                {recentRecipes.map( (recipe, index) =>
-                  <Carousel.Item key={index}>
-                    <img
-                      className="d-block w-100"
-                      src={recipe.pictureUrl}
-                      alt={`Illustration de la recette ${recipe.name}`}
-                    />
-                    <Carousel.Caption>
-                      <h3>{recipe.name}</h3>
-                      <Link to={`/recipe/${recipe.id}`}>
-                        <Button>
-                          Voir la recette <FontAwesomeIcon icon={faAngleDoubleRight} />
-                        </Button>
-                      </Link>
-                    </Carousel.Caption>
-                  </Carousel.Item>
-                )}
-              </Carousel>
+      <Layout errorMessage={errorMessage}>
+        <Jumbotron className="text-center">
+          { currentUser.status === FETCHING ?
+            <Spinner />
+            :
+              currentUser.status === FETCH_SUCCESSFUL ?
+              <Fragment>
+                <h1>
+                  Bonjour {currentUser.data.email}!
+                </h1>
+                <p>
+                  Texte amical pour les utilisateurs inscrits
+                </p>
+              </Fragment>
               :
-              <Spinner />
-            }
-          </main>
-        </Container>
-        <footer className="mt-4 text-center">
-          &copy; CDA Grenoble 2020
-        </footer>
-      </div>
+              <Fragment>
+                <h1>
+                  Bienvenue!
+                </h1>
+                <p>
+                  Texte amical pour inviter les visiteurs à s'inscrire
+                </p>
+                <Link to='/login'>
+                  <Button>Se connecter</Button>
+                </Link>
+              </Fragment>
+          }
+        </Jumbotron>
+        <h2>Nos dernières recettes</h2>
+        {recentRecipes ?
+          <Carousel>
+            {recentRecipes.map( (recipe, index) =>
+              <Carousel.Item key={index}>
+                <img
+                  className="d-block w-100"
+                  src={recipe.pictureUrl}
+                  alt={`Illustration de la recette ${recipe.name}`}
+                />
+                <Carousel.Caption>
+                  <h3>{recipe.name}</h3>
+                  <Link to={`/recipe/${recipe.id}`}>
+                    <Button>
+                      Voir la recette <FontAwesomeIcon icon={faAngleDoubleRight} />
+                    </Button>
+                  </Link>
+                </Carousel.Caption>
+              </Carousel.Item>
+            )}
+          </Carousel>
+          :
+          <Spinner />
+        }
+      </Layout>
     );
   }
 }
