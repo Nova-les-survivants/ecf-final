@@ -5,6 +5,7 @@
         "php": "^7.2.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "doctrine/annotations": "^1.10",
         "doctrine/doctrine-bundle": "^2.0",
         "fzaninotto/faker": "^1.9",
         "nelmio/cors-bundle": "^2.0",
@@ -16,6 +17,7 @@
         "symfony/orm-pack": "^1.0",
         "symfony/security-bundle": "5.0.*",
         "symfony/serializer": "5.0.*",
+        "symfony/validator": "5.0.*",
         "symfony/yaml": "5.0.*"
     },
     "require-dev": {
